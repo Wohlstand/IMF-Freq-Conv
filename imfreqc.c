@@ -149,8 +149,7 @@ int main(int argc, char**argv)
 
     if(sourceF==targetF)
     {
-        printf("                        FREQUENCIES ARE SAME!\n\n%s", usage);
-        return 1;
+        printf("FREQUENCIES ARE SAME, Fixing lenght bytes only!\n");
     }
 
     double factor = targetF/sourceF;
