@@ -27,18 +27,17 @@ cl imfreqc.c /link /out:imfreqc.exe
 
 # Usage
 ```text
-Syntax: imflench <SourceFrequency> <oldfile>.imf <DestFrequency> <newfile>.imf
+------------------------------------------------------------------------------
+Syntax: imfreqc <SourceFrequency> <oldfile>.imf <DestFrequency> <newfile>.imf
 
 SourceFrequency - number 280 560 or 700
 DestFrequency   - number 280 560 or 700
-
 ------------------------------------------------------------------------------
 Supported frequencies:
 
-------------------------------------------------------------------------------
-  280Hz - Duke Nukem II
-  560Hz - Bio Menace, Commander Keen, Cosmo's Cosmic Adventures, Monster Bash
-  700Hz - Blake Stone, Major Stryker, Operation Body Count, Wolfenstein 3-D
+* 280Hz - Duke Nukem II
+* 560Hz - Bio Menace, Commander Keen, Cosmo's Cosmic Adventures, Monster Bash
+* 700Hz - Blake Stone, Major Stryker, Operation Body Count, Wolfenstein 3-D
 
 ------------------------------------------------------------------------------
 ```
