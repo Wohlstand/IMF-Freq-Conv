@@ -31,20 +31,20 @@ int processFile(char* src, char*dst, double factor)
     FILE* source = fopen(src, "rb");
     if(!source)
     {
-        printf("FAIL TO OPEN SOURCE FILE!\n");
+        printf("FAIL TO OPEN SOURCE FILE!\n(%s)\n\n", src);
         return 3;
     }
     
     FILE* target = fopen(dst, "wb");
     if(!target)
     {
-        printf("FAIL TO OPEN TARGET FILE!\n");
+        printf("FAIL TO OPEN TARGET FILE!\n(%s)\n\n", dst);
         return 3;
     }
 
     if(fread(byte2, 1, 2, source)!=2)
     {
-        printf("FAIL TO READ SOURCE FILE!\n");
+        printf("FAIL TO READ SOURCE FILE!\n(%s)\n\n", src);
         return 3;
     }
     unsigned int lenght = 999999999;
@@ -91,30 +91,44 @@ int processFile(char* src, char*dst, double factor)
     fclose(source);
     fclose(target);
 
-    printf("DONE %iu bytes!\n", got);
+    printf("DONE %iu bytes!\n\n"
+           "------------------------------------------------------------------------------\n", got);
 
     return 0;
 }
+
+const char *logo  =    "------------------------------------------------------------------------------\n"
+                       "IMF frequency converter - A tiny tool which converts a chunk delays in the \n"
+                       "IMF (id Software Music Format) between 280Hz, 560hz and 700Hz tempo speeds.\n\n"
+
+                       "Licensed under GNU General Public License version 3.\n"
+                       "Source code: https://github.com/Wohlstand/IMF-Freq-Conv\n"
+                       "------------------------------------------------------------------------------\n";
+
+const char *usage =    "------------------------------------------------------------------------------\n"
+                       "Syntax: imfreqc <SourceFrequency> <oldfile>.imf <DestFrequency> <newfile>.imf\n\n"
+                       "SourceFrequency - number 280 560 or 700\n"
+                       "DestFrequency   - number 280 560 or 700\n\n"
+
+                       "------------------------------------------------------------------------------\n"
+                       "Supported frequencies:\n"
+                       "------------------------------------------------------------------------------\n"
+                       "  280Hz - Duke Nukem II\n"
+                       "  560Hz - Bio Menace, Commander Keen, Cosmo's Cosmic Adventures, Monster Bash\n"
+                       "  700Hz - Blake Stone, Major Stryker, Operation Body Count, Wolfenstein 3-D\n\n"
+                       "------------------------------------------------------------------------------\n";
 
 
 
 int main(int argc, char**argv)
 {
+    printf("%s\n", logo);
+
     if(argc<5)
     {
         if( (argc<2) || (argc>=2)&&(strcmp(argv[1], "--help")!=0) )
-            printf("Too few args!\n");
-
-        printf("Syntax: imflench <SourceFrequency> <oldfile>.imf <DestFrequency> <newfile>.imf\n\n"
-               "SourceFrequency - number 280 560 or 700\n"
-               "DestFrequency   - number 280 560 or 700\n\n"
-               "------------------------------------------------------------------------------\n"
-               "Supported frequencies:\n\n"
-               "------------------------------------------------------------------------------\n"
-               "  280Hz - Duke Nukem II\n"
-               "  560Hz - Bio Menace, Commander Keen, Cosmo's Cosmic Adventures, Monster Bash\n"
-               "  700Hz - Blake Stone, Major Stryker, Operation Body Count, Wolfenstein 3-D\n\n"
-               "------------------------------------------------------------------------------\n");
+            printf("                      TOO FEW ARGUMENTS!\n\n");
+        printf("%s", usage);
         return 1;
     }
 
@@ -123,33 +137,19 @@ int main(int argc, char**argv)
 
     if((sourceF != 280.0) && (sourceF != 560.0) && (sourceF != 700.0) )
     {
-        printf("Unsupported source frequency!\n"
-               "------------------------------------------------------------------------------\n"
-               "Supported frequencies:\n\n"
-               "------------------------------------------------------------------------------\n"
-               "  280Hz - Duke Nukem II\n"
-               "  560Hz - Bio Menace, Commander Keen, Cosmo's Cosmic Adventures, Monster Bash\n"
-               "  700Hz - Blake Stone, Major Stryker, Operation Body Count, Wolfenstein 3-D\n\n"
-               "------------------------------------------------------------------------------\n");
+        printf("                     UNSUPPORTED SOURCE FREQUENCY!\n\n%s", usage);
         return 1;
     }
 
     if((targetF != 280.0) && (targetF != 560.0) && (targetF != 700.0) )
     {
-        printf("Unsupported target frequency!\n"
-               "------------------------------------------------------------------------------\n"
-               "Supported frequencies:\n\n"
-               "------------------------------------------------------------------------------\n"
-               "  280Hz - Duke Nukem II\n"
-               "  560Hz - Bio Menace, Commander Keen, Cosmo's Cosmic Adventures, Monster Bash\n"
-               "  700Hz - Blake Stone, Major Stryker, Operation Body Count, Wolfenstein 3-D\n\n"
-               "------------------------------------------------------------------------------\n");
+        printf("                     UNSUPPORTED TARGET FREQUENCY!\n\n%s", usage);
         return 1;
     }
 
     if(sourceF==targetF)
     {
-        printf("Frequencies are same!\n");
+        printf("                        FREQUENCIES ARE SAME!\n\n%s", usage);
         return 1;
     }
 
@@ -157,5 +157,4 @@ int main(int argc, char**argv)
 
     return processFile(argv[2], argv[4], factor);
 }
-
 
