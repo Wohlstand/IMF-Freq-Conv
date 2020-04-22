@@ -28,15 +28,17 @@ int processFile(char* src, char*dst, double factor)
     unsigned char null[2]  = {0, 0};
     unsigned char byte2[2] = {0, 0};
     unsigned char entry[4] = {0, 0, 0, 0};
+    FILE *source, *target;
+    unsigned int lenght, got, onebyte;
 
-    FILE* source = fopen(src, "rb");
+    source = fopen(src, "rb");
     if(!source)
     {
         printf("FAIL TO OPEN SOURCE FILE!\n(%s)\n\n", src);
         return 3;
     }
 
-    FILE* target = fopen(dst, "wb");
+    target = fopen(dst, "wb");
     if(!target)
     {
         printf("FAIL TO OPEN TARGET FILE!\n(%s)\n\n", dst);
@@ -48,7 +50,8 @@ int processFile(char* src, char*dst, double factor)
         printf("FAIL TO READ SOURCE FILE!\n(%s)\n\n", src);
         return 3;
     }
-    unsigned int lenght = 999999999;
+
+    lenght = 999999999;
     if( memcmp(byte2, null, 2)==0 )
     {
         fseek(source, 0, SEEK_END);
@@ -67,13 +70,14 @@ int processFile(char* src, char*dst, double factor)
         fwrite(byte2, 1, 2, target); //Just copy-paste as-is
     }
 
-    unsigned int got = 0;
+    got = 0;
     while( (fread(entry, 1, 4, source)==4) && (got<lenght) )
     {
         unsigned short len = 0;
+        double lenT;
         len  = ((unsigned short)entry[2]);
         len |= ((unsigned short)entry[3])<<8;
-        double lenT = len;
+        lenT = len;
         lenT = lenT*factor;//Change delay with applying of the factor
         len = (unsigned short)lenT;
         entry[2] = (unsigned char)((len&0x00FF));
@@ -82,7 +86,7 @@ int processFile(char* src, char*dst, double factor)
         got += 4;
     }
 
-    unsigned char onebyte = 0;
+    onebyte = 0;
     //Copy-Paste bytes left in the tail
     while(fread(&onebyte, 1, 1, source)==1)
     {
@@ -123,6 +127,8 @@ const char *usage =    "--------------------------------------------------------
 
 int main(int argc, char**argv)
 {
+    double sourceF, targetF, factor;
+
     printf("%s\n", logo);
 
     if(argc<5)
@@ -133,8 +139,8 @@ int main(int argc, char**argv)
         return 1;
     }
 
-    double sourceF = (double)atoi(argv[1]);
-    double targetF = (double)atoi(argv[3]);
+    sourceF = (double)atoi(argv[1]);
+    targetF = (double)atoi(argv[3]);
 
     if((sourceF != 280.0) && (sourceF != 560.0) && (sourceF != 700.0) )
     {
@@ -153,7 +159,7 @@ int main(int argc, char**argv)
         printf("FREQUENCIES ARE SAME, Fixing lenght bytes only!\n");
     }
 
-    double factor = targetF/sourceF;
+    factor = targetF/sourceF;
 
     return processFile(argv[2], argv[4], factor);
 }
