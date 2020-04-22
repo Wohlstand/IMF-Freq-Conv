@@ -19,6 +19,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <memory.h>
 #include <string.h>
 
@@ -34,7 +35,7 @@ int processFile(char* src, char*dst, double factor)
         printf("FAIL TO OPEN SOURCE FILE!\n(%s)\n\n", src);
         return 3;
     }
-    
+
     FILE* target = fopen(dst, "wb");
     if(!target)
     {
@@ -58,7 +59,7 @@ int processFile(char* src, char*dst, double factor)
         byte2[1] = (unsigned char)((lenght&0x00FF00)>>8);
         fwrite(byte2, 1, 2, target); //Store lenght byte!
     }
-    else 
+    else
     {
         lenght  = ((unsigned short)byte2[0]);
         lenght |= ((unsigned short)byte2[1])<<8;
